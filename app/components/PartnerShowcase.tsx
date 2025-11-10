@@ -90,7 +90,21 @@ const PartnerShowcase = () => {
                   
                   {/* Partner Name - Fixed Height */}
                   <h3 className="text-xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 min-h-[2.5rem] flex items-center justify-center">
-                    {partner.name}
+                    {index === 1 ? (
+                      <>
+                        {partner.name.split('SDX VISION')[0]}
+                        <a 
+                          href="https://sdx.vision" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-orange-500 hover:text-orange-600 underline transition-colors duration-300"
+                        >
+                          SDX VISION
+                        </a>
+                      </>
+                    ) : (
+                      partner.name
+                    )}
                   </h3>
                   
                   {/* Region Badge - Fixed Height */}
