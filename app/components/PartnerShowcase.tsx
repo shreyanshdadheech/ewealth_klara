@@ -1,17 +1,12 @@
 'use client';
 
+import { useState } from "react";
 import { Sparkles, Quote } from "lucide-react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-
 import { useLanguage } from "@/contexts/LanguageContext";
 
 const PartnerShowcase = () => {
   const { t } = useLanguage();
+  const [isFlipped, setIsFlipped] = useState(false);
   
   const partners = [
     { name: t.partnerShowcase.partner1Name, region: t.partnerShowcase.partner1Region, description: t.partnerShowcase.partner1Description },
@@ -97,7 +92,7 @@ const PartnerShowcase = () => {
                           href="https://sdx.vision" 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-orange-500 hover:text-orange-600 underline transition-colors duration-300"
+                          className="ml-1 text-orange-500 hover:text-orange-600 transition-colors duration-300"
                         >
                           SDX VISION
                         </a>
@@ -142,19 +137,124 @@ const PartnerShowcase = () => {
               
               {/* Content Card */}
               <div className="relative grid md:grid-cols-2 gap-8 p-8 md:p-12 rounded-3xl bg-card/60 backdrop-blur-md border border-accent/30 shadow-glow">
-                {/* Image Side */}
+                {/* Flip Card Container */}
                 <div className="flex items-center justify-center">
-                  <div className="relative">
+                  <div 
+                    className="relative w-full aspect-[3/4] md:aspect-[4/5] cursor-pointer group/flip"
+                    style={{ perspective: '1000px' }}
+                    onClick={() => setIsFlipped(!isFlipped)}
+                  >
+                    <div
+                      className="relative w-full h-full transition-transform duration-700"
+                      style={{
+                        transformStyle: 'preserve-3d',
+                        transform: isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                      }}
+                    >
+                      {/* Front Side - Image */}
+                      <div
+                        className="absolute inset-0 w-full h-full backface-hidden"
+                        style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}
+                      >
+                        <div className="relative h-full">
                     {/* Image Glow */}
                     <div className="absolute inset-0 bg-gradient-to-br from-accent/40 to-[hsl(var(--accent-secondary))]/40 rounded-2xl blur-xl animate-glow" />
                     
                     {/* Image */}
-                    <div className="relative rounded-2xl overflow-hidden border-2 border-accent/30 shadow-glow-accent">
+                    <div className="relative h-full rounded-2xl overflow-hidden border-2 border-accent/30 shadow-glow-accent group-hover/flip:border-accent/50 transition-all duration-300">
                       <img 
                         src="/assets/laura-profile.jpg" 
                         alt="Laura Klara Schlevinski - Geschäftsführerin und Gesellschafterin"
-                        className="w-full h-auto object-cover aspect-[3/4] md:aspect-[4/5]"
+                        className="w-full h-full object-cover group-hover/flip:scale-105 transition-transform duration-300"
                       />
+                      {/* Know More Button - Bottom Right */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsFlipped(true);
+                        }}
+                        className="absolute bottom-4 right-4 px-4 py-2 rounded-full bg-accent/90 hover:bg-accent text-white text-sm font-semibold backdrop-blur-sm shadow-lg transition-all duration-300 hover:scale-105 flex items-center gap-2"
+                      >
+                        <span>{t.partnerShowcase.expandBioLabel}</span>
+                        <Sparkles className="w-4 h-4" />
+                      </button>
+                    </div>
+                        </div>
+                      </div>
+
+                      {/* Back Side - Biography Details */}
+                      <div
+                        className="absolute inset-0 w-full h-full backface-hidden rounded-2xl overflow-y-auto"
+                        style={{ 
+                          backfaceVisibility: 'hidden', 
+                          WebkitBackfaceVisibility: 'hidden',
+                          transform: 'rotateY(180deg)',
+                        }}
+                      >
+                        <div className="h-full p-4 rounded-2xl bg-gradient-to-br from-card via-card/90 to-card/80 backdrop-blur-md border-2 border-accent/30 shadow-glow-accent flex flex-col">
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsFlipped(false);
+                            }}
+                            className="mb-3 px-3 py-1.5 rounded-full bg-accent/10 hover:bg-accent/20 text-accent text-xs font-semibold border border-accent/20 transition-all duration-300 self-start"
+                          >
+                            ← Back
+                          </button>
+                          <div className="space-y-3 flex-1 overflow-y-auto">
+                            {/* Quote */}
+                            <div className="relative p-4 rounded-xl bg-gradient-to-br from-card via-card to-card/80 border border-border">
+                              <div className="absolute top-2 left-2 text-accent/20">
+                                <Quote className="h-5 w-5" />
+                              </div>
+                              <p className="text-sm text-foreground/90 leading-relaxed mt-4 italic">
+                                {t.about.quote}{" "}
+                                <span className="font-bold text-accent">{t.about.quoteHighlight}</span>{" "}
+                                {t.about.quoteEnd}
+                              </p>
+                            </div>
+
+                            {/* Journey and Education */}
+                            <div className="grid grid-cols-1 gap-3">
+                              {/* Early Journey */}
+                              <div className="p-4 rounded-xl bg-gradient-to-br from-primary/5 to-accent/5 border border-border">
+                                <div className="flex items-start gap-2 mb-2">
+                                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-accent to-[hsl(var(--accent-secondary))] flex items-center justify-center text-lg">
+                                    🌍
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-bold text-foreground mb-1">{t.about.journey.title}</h4>
+                                    <div className="h-0.5 w-10 bg-gradient-to-r from-accent to-[hsl(var(--accent-secondary))] rounded-full" />
+                                  </div>
+                                </div>
+                                <p className="text-foreground/80 leading-relaxed text-xs">
+                                  {t.about.journey.description}{" "}
+                                  <span className="font-semibold text-accent">{t.about.journey.highlight}</span>{" "}
+                                  {t.about.journey.end}
+                                </p>
+                              </div>
+
+                              {/* Education & Expertise */}
+                              <div className="p-4 rounded-xl bg-gradient-to-br from-[hsl(var(--accent-secondary))]/5 to-primary/5 border border-border">
+                                <div className="flex items-start gap-2 mb-2">
+                                  <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-[hsl(var(--accent-secondary))] flex items-center justify-center text-lg">
+                                    🎓
+                                  </div>
+                                  <div>
+                                    <h4 className="text-sm font-bold text-foreground mb-1">{t.about.education.title}</h4>
+                                    <div className="h-0.5 w-10 bg-gradient-to-r from-primary to-[hsl(var(--accent-secondary))] rounded-full" />
+                                  </div>
+                                </div>
+                                <p className="text-foreground/80 leading-relaxed text-xs">
+                                  {t.about.education.description}{" "}
+                                  <span className="font-semibold text-primary">{t.about.education.highlight}</span>
+                                  {t.about.education.end}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -196,80 +296,6 @@ const PartnerShowcase = () => {
                       {t.partnerShowcase.leadershipSkill3}
                     </span>
                   </div>
-
-                  {/* Expandable Biography Section */}
-                  <Accordion type="single" collapsible className="pt-4">
-                    <AccordionItem value="bio" className="border-none">
-                      <AccordionTrigger className="hover:no-underline text-left py-4 px-6 rounded-xl bg-accent/5 hover:bg-accent/10 transition-all duration-300">
-                        <span className="text-base font-semibold text-foreground">
-                          {t.partnerShowcase.expandBioLabel}
-                        </span>
-                      </AccordionTrigger>
-                      
-                      <AccordionContent className="pt-6">
-                        <div className="space-y-6 p-6 rounded-xl bg-card/30 border border-border/50">
-                          {/* Quote */}
-                          <div className="relative p-6 rounded-xl bg-gradient-to-br from-card via-card to-card/80 border border-border">
-                            <div className="absolute top-4 left-4 text-accent/20">
-                              <Quote className="h-8 w-8" />
-                            </div>
-                            <p className="text-base md:text-lg text-foreground/90 leading-relaxed mt-6 italic">
-                              {t.about.quote}{" "}
-                              <span className="font-bold text-accent">{t.about.quoteHighlight}</span>{" "}
-                              {t.about.quoteEnd}
-                            </p>
-                          </div>
-
-                          {/* Journey and Education */}
-                          <div className="grid md:grid-cols-2 gap-6">
-                            {/* Early Journey */}
-                            <div className="p-6 rounded-xl bg-gradient-to-br from-primary/5 to-accent/5 border border-border">
-                              <div className="flex items-start gap-3 mb-3">
-                                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-[hsl(var(--accent-secondary))] flex items-center justify-center text-xl">
-                                  🌍
-                                </div>
-                                <div>
-                                  <h4 className="text-lg font-bold text-foreground mb-1">{t.about.journey.title}</h4>
-                                  <div className="h-1 w-12 bg-gradient-to-r from-accent to-[hsl(var(--accent-secondary))] rounded-full" />
-                                </div>
-                              </div>
-                              <p className="text-foreground/80 leading-relaxed text-sm">
-                                {t.about.journey.description}{" "}
-                                <span className="font-semibold text-accent">{t.about.journey.highlight}</span>{" "}
-                                {t.about.journey.end}
-                              </p>
-                            </div>
-
-                            {/* Education & Expertise */}
-                            <div className="p-6 rounded-xl bg-gradient-to-br from-[hsl(var(--accent-secondary))]/5 to-primary/5 border border-border">
-                              <div className="flex items-start gap-3 mb-3">
-                                <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-[hsl(var(--accent-secondary))] flex items-center justify-center text-xl">
-                                  🎓
-                                </div>
-                                <div>
-                                  <h4 className="text-lg font-bold text-foreground mb-1">{t.about.education.title}</h4>
-                                  <div className="h-1 w-12 bg-gradient-to-r from-primary to-[hsl(var(--accent-secondary))] rounded-full" />
-                                </div>
-                              </div>
-                              <p className="text-foreground/80 leading-relaxed text-sm">
-                                {t.about.education.description}{" "}
-                                <span className="font-semibold text-primary">{t.about.education.highlight}</span>
-                                {t.about.education.end}
-                              </p>
-                            </div>
-                          </div>
-
-                          {/* Closing Quote */}
-                          <div className="text-center py-6">
-                            <Quote className="h-10 w-10 text-accent/30 mx-auto mb-4" />
-                            <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-primary via-accent to-[hsl(var(--accent-secondary))] bg-clip-text text-transparent leading-relaxed">
-                              {t.about.closingQuote}
-                            </p>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
                 </div>
               </div>
             </div>
