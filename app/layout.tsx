@@ -5,6 +5,9 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: "EWealth Global",
   description: "EWealth Management GmbH",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
